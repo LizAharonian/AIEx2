@@ -22,25 +22,26 @@ class Decision_tree_model_class(object):
         elif len(attributes) == 0:
             return Decision_tree_node_class(None, depth, True, examples_tuple[0][1], None)
         else:
-            best_att = set.choose_att(attributes,examples_tuple)
+            best_att = self.choose_att(attributes,examples_tuple)
+            attributes.remove(best_att)
             children_dict = {}
             root = Decision_tree_node_class(best_att,depth,False,None,children_dict)
             for feature_val in ut.FEATURES_VALS_DICT[best_att]:
                 sub_examples = self.get_examples_of_the_specified_feature_val(examples_tuple, best_att, feature_val)
-                children_dict[feature_val] = self.DTL(sub_examples, attributes.remove(best_att),self.mode(examples_tuple), depth + 1)
+                children_dict[feature_val] = self.DTL(sub_examples,attributes ,self.mode(examples_tuple), depth + 1)
             return root
     def get_examples_of_the_specified_feature_val(self, examples_tuple, feature, feature_val):
-        sub_examples = [example_tuple[0] for example_tuple in examples_tuple if example_tuple[0][feature] == feature_val]
+        sub_examples = [example_tuple for example_tuple in examples_tuple if example_tuple[0][feature] == feature_val]
         return  sub_examples
 
     def choose_att(self,left_att_list, examples_tuple):
-        entropy = self.calculate_entropy()
+        entropy = self.calculate_entropy(examples_tuple)
         gain_list = []
         for feature in left_att_list:
             gain = self.compute_gate(feature, examples_tuple, entropy)
             gain_list.append((feature, gain))
         gain_list.sort(key=lambda tup: tup[0])
-        return gain_list.pop()[1]
+        return gain_list.pop()[0]
 
     def calculate_entropy(self, examples_tuple):
         positive_prob = self.get_probability_of_tag(ut.YES, examples_tuple)
