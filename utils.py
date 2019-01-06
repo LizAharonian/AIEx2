@@ -64,14 +64,14 @@ def compute_accuracy(y_hat_list, y_list):
 def create_split_examples_dict():
     global EXAMPLES_DICT
     EXAMPLES_DICT = {}
-    EXAMPLES_LIST[YES] = []
-    EXAMPLES_LIST[NO] = []
+    EXAMPLES_DICT[YES] = []
+    EXAMPLES_DICT[NO] = []
     for ex_tuple in EXAMPLES_LIST:
         tag = ex_tuple[1]
         if tag == YES:
-            EXAMPLES_LIST[YES].append(ex_tuple[0])
+            EXAMPLES_DICT[YES].append(ex_tuple[0])
         else:
-            EXAMPLES_LIST[NO].append(ex_tuple[0])
+            EXAMPLES_DICT[NO].append(ex_tuple[0])
 
 
 def create_tag_set():
@@ -95,10 +95,6 @@ def create_features_sets():
         example_dict = example_tuple[0]
         for feature in FEATURES_LIST:
             FEATURES_VALS_DICT[feature].add(example_dict[feature])
-
-
-
-
 
 
 
