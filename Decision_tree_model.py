@@ -1,6 +1,7 @@
 import utils as ut
 from Decision_tree_node import Decision_tree_node_class
 from Decision_tree import Decision_tree_class
+import math
 
 
 
@@ -42,18 +43,26 @@ class Decision_tree_model_class(object):
         return gain_list.pop()[1]
 
     def calculate_entropy(self, examples_tuple):
-        pass
+        positive_prob = self.get_probability_of_tag(ut.YES, examples_tuple)
+        negative_prob = self.get_probability_of_tag(ut.NO, examples_tuple)
+        return -positive_prob*math.log(positive_prob, 2.0) -negative_prob*math.log(negative_prob, 2.0)
+
     def get_probability_of_tag(self, tag, examples_tuple):
         counter = 0
         for ex in examples_tuple:
             if ex[1] == tag:
                 counter += 1
-                
-
+        return float(counter)/float(len(examples_tuple))
 
 
     def compute_gate(self,feature, examples_tuple, entropy):
-        pass
+        sigma = 0
+        for feature_val in ut.FEATURES_VALS_DICT[feature]:
+            sub_ex = self.get_examples_of_the_specified_feature_val(examples_tuple, feature, feature_val)
+            precent = float(len(sub_ex))/float(len(ut.EXAMPLES_LIST))
+            sub_entropy = self.calculate_entropy(examples_tuple)
+            sigma += precent * sub_entropy
+        return entropy - sigma
 
 
     def is_all_examples_tagged_the_same(self, examples_tuple):
