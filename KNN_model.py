@@ -17,7 +17,7 @@ class KNN(object):
         yes_counter = 0
         no_counter = 0
         for i in range(self.k):
-            y = hamming_distances.pop(i)[1]
+            y = hamming_distances[i][1]
             if y==ut.YES:
                 yes_counter += 1
             else:
