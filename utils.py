@@ -1,22 +1,21 @@
+#globals
 FEATURES_LIST = []
 Y = None
 EXAMPLES_LIST = []
 TEST_LIST = []
-
 EXAMPLES_DICT = {}
-
 FEATURES_VALS_DICT = {}
 
 YES = 'yes'
 NO = 'no'
 
-#todo: it can also be true\false! and not just yes\no - use set for distinct
-
-
-
-
 
 def read_train_file(file_name):
+    """
+    read_train_file function.
+    reads the train file and initializes some globals.
+    :param file_name:
+    """
     global FEATURES_LIST,Y,EXAMPLES_LIST, POSITIVE_EXAMPLES_NUM, NEGATIVE_EXAMPLES_NUM
     POSITIVE_EXAMPLES_NUM = 0
     NEGATIVE_EXAMPLES_NUM = 0
@@ -39,6 +38,12 @@ def read_train_file(file_name):
 
 
 def read_test_file(file_name):
+    """
+    read_test_file function.
+    reads the test file and initializes some globals.
+    :param file_name:
+    :return:
+    """
     global TEST_LIST
     TEST_LIST = []
     is_first_line = True
@@ -55,6 +60,12 @@ def read_test_file(file_name):
 
 
 def compute_accuracy(y_hat_list, y_list):
+    """
+    compute_accuracy function.
+    :param y_hat_list: list of preds.
+    :param y_list: list of real tags.
+    :return: accuracy.
+    """
     good = 0
     for y_hat, y in zip(y_hat_list, y_list):
         if y == y_hat:
@@ -62,6 +73,10 @@ def compute_accuracy(y_hat_list, y_list):
     return round(float(good) / float(len(y_hat_list)) * 100,2)
 
 def create_split_examples_dict():
+    """
+    create_split_examples_dict function.
+    splites the examples according to their tag.
+    """
     global EXAMPLES_DICT
     EXAMPLES_DICT = {}
     EXAMPLES_DICT[YES] = []
@@ -75,6 +90,11 @@ def create_split_examples_dict():
 
 
 def create_tag_set():
+    """
+    create_tag_set function.
+    initialize the global params YES and NO.
+    :return:
+    """
     global YES, NO
     set_tags = set()
     for example_tuple in EXAMPLES_LIST:
@@ -87,6 +107,11 @@ def create_tag_set():
             NO = tag
 
 def create_features_sets():
+    """
+    create_features_sets function.
+    creates set of all the features and their possible vals.
+    :return:
+    """
     global FEATURES_VALS_DICT
     FEATURES_VALS_DICT = {}
     for feature in FEATURES_LIST:
@@ -97,7 +122,7 @@ def create_features_sets():
             FEATURES_VALS_DICT[feature].add(example_dict[feature])
 
 
-
+#call utils functions
 read_train_file('train.txt')
 read_test_file('test.txt')
 create_tag_set()

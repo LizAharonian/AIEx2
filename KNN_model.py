@@ -1,13 +1,25 @@
 import utils as ut
 
 
-
+"""
+KNN class.
+implementation of KNN algo.
+"""
 class KNN(object):
     def __init__(self,k):
+        """
+        constructor.
+        :param k: number of nearest neighbors.
+        """
         self.k = k
         pass
 
     def predict(self,predict_ex):
+        """
+        predict function.
+        :param predict_ex: example to be tagged.
+        :return: the predicted tag.
+        """
         if len(ut.EXAMPLES_LIST) < self.k:
             return None
         hamming_distances = []
@@ -25,6 +37,12 @@ class KNN(object):
         return ut.YES if yes_counter > no_counter else ut.NO
 
     def get_hamming_distance(self,ex1_dict, ex2_dict):
+        """
+        get_hamming_distance function.
+        :param ex1_dict: example 1 for comparison.
+        :param ex2_dict: example 2 for comparison.
+        :return: hamming distance.
+        """
         hamming_dis = 0
         for feature in ut.FEATURES_LIST:
             if (ex1_dict[feature] != ex2_dict[feature]):
@@ -32,6 +50,11 @@ class KNN(object):
         return hamming_dis
 
     def train(self):
+        """
+        train function.
+        runs the model on the train data.
+        :return: acc
+        """
         y_list = []
         y_hat_list = []
         for ex_dict in ut.EXAMPLES_LIST:
@@ -39,16 +62,21 @@ class KNN(object):
             y_hat_list.append(self.predict(ex_dict[0]))
 
         acc = ut.compute_accuracy(y_hat_list, y_list)
-        print ('accuracy on train is: ' + str(acc))
+        return acc
 
     def test(self):
+        """
+        test func.
+        runs the model on the test data.
+        :return: list of predictions and acc
+        """
         y_list = []
         y_hat_list = []
         for ex_dict in ut.TEST_LIST:
             y_list.append(ex_dict[1])
             y_hat_list.append(self.predict(ex_dict[0]))
-
         acc = ut.compute_accuracy(y_hat_list, y_list)
-        print ('accuracy on test is: ' + str(acc))
-        return y_hat_list,acc
+        return y_hat_list, acc
+
+
 
