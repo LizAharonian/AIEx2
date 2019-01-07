@@ -18,7 +18,7 @@ def main():
     decision_tree_model.train()
     dtl_res, dtl_acc = decision_tree_model.test()
     tree = decision_tree_model.decision_tree.print_tree(decision_tree_model.decision_tree.root)
-    with open("tree_output.txt", 'w') as tree_output:
+    with open("output_tree.txt", 'w') as tree_output:
         tree_output.write(tree)
     with open("output.txt", 'w') as output_file:
         file_lines = get_file_lines(knn_res,bayes_res,dtl_res)

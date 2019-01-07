@@ -24,7 +24,6 @@ class Decision_tree_model_class(object):
             liza = self.mode(examples_tuple)
             return Decision_tree_node_class(None, depth, True, self.mode(examples_tuple), None)
         else:
-            print "examples len: " + str(len(examples_tuple))
             best_att = self.choose_att(attributes,examples_tuple)
             child_att = attributes[:]
             child_att.remove(best_att)
