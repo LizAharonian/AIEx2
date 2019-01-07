@@ -8,15 +8,15 @@ from Decision_tree_model import Decision_tree_model_class
 def main():
     knn_model = KNN(5)
     knn_model.train()
-    knn_res = knn_model.test()
+    knn_res, knn_acc = knn_model.test()
 
     bayes_model = Bayes()
     bayes_model.train()
-    bayes_res = bayes_model.test()
+    bayes_res, bayes_acc = bayes_model.test()
 
     decision_tree_model = Decision_tree_model_class()
     decision_tree_model.train()
-    dtl_res = decision_tree_model.test()
+    dtl_res, dtl_acc = decision_tree_model.test()
     tree = decision_tree_model.decision_tree.print_tree(decision_tree_model.decision_tree.root)
     with open("tree_output.txt", 'w') as tree_output:
         tree_output.write(tree)
@@ -25,6 +25,7 @@ def main():
         lines = []
         lines.append("Num\tDT\tKNN\tnaiveBase")
         lines += file_lines
+        lines.append("\t" + str(dtl_acc) + "\t" + str(knn_acc) + "\t" + str(bayes_acc))
         output_file.writelines("\n".join(lines))
 
 
