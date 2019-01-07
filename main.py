@@ -6,23 +6,35 @@ from Decision_tree_model import Decision_tree_model_class
 
 
 def main():
+    knn_model = KNN(5)
+    knn_model.train()
+    knn_res = knn_model.test()
 
-    examples_list = ut.EXAMPLES_LIST
-    y = ut.Y
-    # knn_model = KNN(5)
-    # knn_model.train()
-    # knn_model.test()
+    bayes_model = Bayes()
+    bayes_model.train()
+    bayes_res = bayes_model.test()
 
-    # bayes_model = Bayes()
-    # bayes_model.train()
-    # bayes_model.test()
     decision_tree_model = Decision_tree_model_class()
     decision_tree_model.train()
-    decision_tree_model.test()
+    dtl_res = decision_tree_model.test()
     tree = decision_tree_model.decision_tree.print_tree(decision_tree_model.decision_tree.root)
-    with open("liz.txt", 'w') as liz:
-        liz.write(tree)
-    pass
+    with open("tree_output.txt", 'w') as tree_output:
+        tree_output.write(tree)
+    with open("output.txt", 'w') as output_file:
+        file_lines = get_file_lines(knn_res,bayes_res,dtl_res)
+        lines = []
+        lines.append("Num\tDT\tKNN\tnaiveBase")
+        lines += file_lines
+        output_file.writelines("\n".join(lines))
+
+
+def get_file_lines(knn_res, bayes_res, dtl_res):
+    lines = []
+    counter = 1
+    for k, b, dtl in zip(knn_res, bayes_res, dtl_res):
+        lines.append(str(counter) + "\t" + dtl + "\t" + k + "\t" +b)
+        counter += 1
+    return lines
 
 
 

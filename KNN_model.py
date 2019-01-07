@@ -50,3 +50,5 @@ class KNN(object):
 
         acc = ut.compute_accuracy(y_hat_list, y_list)
         print ('accuracy on test is: ' + str(acc))
+        return y_hat_list
+
