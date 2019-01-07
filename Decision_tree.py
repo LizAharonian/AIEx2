@@ -11,3 +11,18 @@ class Decision_tree_class(object):
                     curr_node = value
                     break
         return curr_node.pred
+
+    def print_tree(self, node):
+        string = ""
+        for child in sorted(node.children_dict):
+            string += node.depth * "\t"
+            if node.depth > 0:
+                string += "|"
+            string += node.attribute + "=" + child
+            if node.children_dict[child].is_leaf:
+                string += ":" + node.children_dict[child].pred + "\n"
+            else:
+                string += "\n" + self.print_tree(node.children_dict[child])
+
+        return string
+

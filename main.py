@@ -16,9 +16,12 @@ def main():
     # bayes_model = Bayes()
     # bayes_model.train()
     # bayes_model.test()
-    decision_tree = Decision_tree_model_class()
-    decision_tree.train()
-    decision_tree.test()
+    decision_tree_model = Decision_tree_model_class()
+    decision_tree_model.train()
+    decision_tree_model.test()
+    tree = decision_tree_model.decision_tree.print_tree(decision_tree_model.decision_tree.root)
+    with open("liz.txt", 'w') as liz:
+        liz.write(tree)
     pass
 
 
