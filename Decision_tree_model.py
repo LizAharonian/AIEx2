@@ -43,11 +43,15 @@ class Decision_tree_model_class(object):
             return Decision_tree_node_class(None, depth, True, self.mode(examples_tuple), None)
         else:
             best_att = self.choose_att(attributes,examples_tuple)
+            if best_att == 'AI':
+                pass
             child_att = attributes[:]
             child_att.remove(best_att)
             children_dict = {}
             root = Decision_tree_node_class(best_att,depth,False,None,children_dict)
-            for feature_val in ut.FEATURES_VALS_DICT[best_att]:
+            for feature_val in sorted(list(ut.FEATURES_VALS_DICT[best_att])):
+                if feature_val=="91":
+                    pass
                 sub_examples = self.get_examples_of_the_specified_feature_val(examples_tuple, best_att, feature_val)
                 children_dict[feature_val] = self.DTL(sub_examples,child_att ,self.mode(examples_tuple), depth + 1)
             return root
@@ -70,12 +74,14 @@ class Decision_tree_model_class(object):
         :return: best att.
         """
         entropy = self.calculate_entropy(examples_tuple)
-        gain_list = []
+        max_feature = None
+        max_gain = -1
         for feature in left_att_list:
             gain = self.compute_gate(feature, examples_tuple, entropy)
-            gain_list.append((feature, gain))
-        gain_list.sort(key=lambda tup: tup[1])
-        return gain_list[-1][0]
+            if gain > max_gain:
+                max_gain = gain
+                max_feature = feature
+        return max_feature
 
     def calculate_entropy(self, examples_tuple):
         """
@@ -83,20 +89,25 @@ class Decision_tree_model_class(object):
         :param examples_tuple: list of examples.
         :return: entropy calc
         """
+        if not examples_tuple:
+            return 0
         positive_prob = self.get_probability_of_tag(ut.YES, examples_tuple)
         negative_prob = self.get_probability_of_tag(ut.NO, examples_tuple)
-        mult_pos = 1
-        mult_neg = 1
-        if positive_prob > 0:
-            mult_pos *= positive_prob*math.log(positive_prob, 2)
-        else:
-            mult_pos = 0
-        if negative_prob > 0:
-            mult_neg *= negative_prob*math.log(negative_prob, 2)
-        else:
-            mult_neg = 0
+        # mult_pos = 1
+        # mult_neg = 1
+        # if positive_prob > 0:
+        #     mult_pos *= positive_prob*math.log(positive_prob, 2)
+        # else:
+        #     mult_pos = 0
+        # if negative_prob > 0:
+        #     mult_neg *= negative_prob*math.log(negative_prob, 2)
+        # else:
+        #     mult_neg = 0
 
-        return -mult_pos - mult_neg
+        if positive_prob == 0.0 or negative_prob == 0.0:
+            return 0
+
+        return -positive_prob*math.log(positive_prob, 2) - negative_prob*math.log(negative_prob, 2)
 
     def get_probability_of_tag(self, tag, examples_tuple):
         """
@@ -109,10 +120,10 @@ class Decision_tree_model_class(object):
         for ex in examples_tuple:
             if ex[1] == tag:
                 counter += 1
-        if len(examples_tuple) == 0:
-            return 0
-        else:
-            return float(counter)/float(len(examples_tuple))
+        # if len(examples_tuple) == 0:
+        #     return 0
+        # else:
+        return float(counter)/float(len(examples_tuple))
 
 
     def compute_gate(self,feature, examples_tuple, entropy):
@@ -124,7 +135,7 @@ class Decision_tree_model_class(object):
         :return: gain of the feature.
         """
         sigma = 0
-        for feature_val in ut.FEATURES_VALS_DICT[feature]:
+        for feature_val in sorted(list(ut.FEATURES_VALS_DICT[feature])):
             sub_ex = self.get_examples_of_the_specified_feature_val(examples_tuple, feature, feature_val)
             precent = float(len(sub_ex))/float(len(examples_tuple))
             sub_entropy = self.calculate_entropy(sub_ex)

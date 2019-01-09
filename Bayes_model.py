@@ -20,8 +20,8 @@ class Bayes(object):
         :return: the predicted tag.
         """
         probs = []
-        probs.append(self.get_probability_per_class(predict_ex, ut.YES))
-        probs.append(self.get_probability_per_class(predict_ex, ut.NO))
+        probs.append(self.get_probability_per_class(predict_ex, ut.YES)*self.get_probability_for_class(ut.YES))
+        probs.append(self.get_probability_per_class(predict_ex, ut.NO)*self.get_probability_for_class(ut.NO))
         return self.argmax(probs)
 
 
@@ -63,6 +63,10 @@ class Bayes(object):
         :param probs: probs list of tags.
         :return: the tag it's prob is the biggest.
         """
+        if probs[0]==probs[1]:
+            pass
+        if probs[0]>probs[1]:
+            pass
         return ut.YES if probs[0] >= probs[1] else ut.NO
 
     def get_probability_for_class(self,tag):

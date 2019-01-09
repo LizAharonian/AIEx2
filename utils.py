@@ -1,3 +1,5 @@
+import math
+
 #globals
 FEATURES_LIST = []
 Y = None
@@ -70,7 +72,9 @@ def compute_accuracy(y_hat_list, y_list):
     for y_hat, y in zip(y_hat_list, y_list):
         if y == y_hat:
             good += 1
-    return round(float(good) / float(len(y_hat_list)) * 100,2)
+    acc = float(good) / float(len(y_hat_list))
+    acc = float(math.ceil(acc * 100)) / float(100)
+    return acc
 
 def create_split_examples_dict():
     """
@@ -123,8 +127,8 @@ def create_features_sets():
 
 
 #call utils functions
-read_train_file('train.txt')
-read_test_file('test.txt')
+read_train_file('/home/liz/PycharmProjects/AIEx2/TESTS-EX2-V3/TEST1/train.txt')
+read_test_file('/home/liz/PycharmProjects/AIEx2/TESTS-EX2-V3/TEST1/test.txt')
 create_tag_set()
 create_features_sets()
 create_split_examples_dict()
